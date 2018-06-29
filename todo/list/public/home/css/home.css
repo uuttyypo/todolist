@@ -1,0 +1,140 @@
+html{
+    overflow-x: hidden; 
+   
+    border-radius: 0px;
+
+ }
+
+#listname{
+    text-align: center;
+    color: yellowgreen;
+    margin-top: -20px;
+}
+
+.itemfinish{
+    text-decoration: line-through;
+}
+
+.serachstyle{
+    color: #F6F6F8;
+}
+
+.listshow{
+    
+    color: red;
+}
+
+ .list_delate {
+        float: right;
+    }
+
+    .left-menu {
+      
+        margin-left: -15px;
+       
+        
+       
+       
+    }
+     
+    .button:visited {
+        color: black;
+        opacity: 0.5;
+    }
+
+    .button {
+ 
+        opacity: 0.8;
+       
+    }
+
+   
+  .finished{
+      color: black;
+  }
+
+ 
+
+        a:hover{
+
+            color: black;
+            
+            background-color: yellowgreen;
+           
+            
+            }
+
+            .completeditem{
+                background: rgba(250, 250, 250, 0.5);
+                color: black;
+                border: 0px;
+                text-align: center;
+              
+            }
+
+            .completeditem a{
+                font-size: 20px;
+                color: black;
+                font-weight: bolder;
+               
+            }
+        
+      
+        
+
+    #app {
+        background-color: #F6F6F8;
+        background-image: url('/images/1.jpg');
+        
+    }
+    .centercontent{
+      
+        background:rgba(0,0,0,.5);
+        
+    }
+
+    .task-input {
+        display: block;
+        height: 35px;
+        width: 100%;
+    }
+  
+
+    .navbar {
+        /*头部导航栏颜色*/
+ 
+        color: antiquewhite;
+       
+        
+        
+    }
+
+   .listname{
+       display: inline;
+       color: yellowgreen;
+       text-align: center;
+       
+   }
+    
+
+    .tab-side {
+        
+        margin-right: 10px;
+    }
+
+    .delete_icon {
+        float: right;
+    }
+
+
+
+.nav-sidebar span{
+    font-size: 20PX;
+    }
+    
+    .nav-sidebar a{
+        font-size: 18PX;
+        font-weight: bolder;
+        color: black;
+        
+        }
