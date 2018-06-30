@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./vue-datepicker-local-master/vue-datepicker-local-master/dist/vue-datepicker-local.css">
+    <link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+    <link href="css/buttons.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous">-->
+    <link rel="stylesheet" href="fontawesome-free-5.1.0-web/css/all.css">
+    <link rel="stylesheet" href="./test.css">
+</head>
+
+<body>
+    <div id="app">
+        <nav class="navbar navbar-inverse ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">DreamList</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" title="清空后请刷新" v-on:click="clearall">清空</a>
+                        </li>
+                        <li>
+                            <a href="#" class="changeimage">背景</a>
+                        </li>
+                        <li>
+                            <a href="#" v-on:click="search">搜索</a>
+                        </li>
+                        <li>
+                            <a href="#">注销</a>
+                        </li>
+                        <li>
+                            <a href="#" v-on:click="sortclick">排序</a>
+                        </li>
+
+                        <li>
+                                <a href="#" v-on:click="showtodo">TODO</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row ">
+
+
+                <div class="col-md-3 secondline left-menu">
+                   <!--左边清单编辑显示部分-->
+                    <ul class="nav nav-sidebar">
+                        <template>
+                           
+
+                            <!--添加清单按钮--> <a href="#" class="button button-block button-default button-primary " v-on:click="click_button" v-show="showbutton">
+                                <!--点击按钮变成文本框-->
+                                <i class="fa fa-plus-circle fa-1x" aria-hidden="true">
+                                </i>
+                            </a>
+                            <!--初始显示为button-->
+                            <input type="text" class="task-input form-control" placeholder="请输入任务清单" v-show="showadds" v-model='newlist.name' v-on:keyup.enter='addlist'
+                                v-on:blur="outfocus" />
+                            <!--outfocus文本框失去焦点时恢复成按钮,默认showadds是false-->
+                            <ul class="nav nav-sidebar list-group">
+                                <li v-for="list in lists" v-on:click="show_curlist(list.id)" >
+                                    <!--将当前的list的id传出来-->
+                                    <a class="button button-block button-default listshow" v-show="!list.isedit"  href="#"   >{{list.name}}
+                                        <span class="list_delate"><!--删除list方法-->
+                                            <i class="glyphicon glyphicon-cog" v-on:click="isediting(list)"></i>
+                                            <i class="glyphicon glyphicon-remove-circle" v-on:click="delete_list(list)"></i>
+                                        </span>
+                                    </a>
+                                   <!--isedit是单个list的一个属性，用来判断当前的list是否在编辑状态,如果在编辑状态就会显示文本框-->
+                                    <input type="text" class="task-input form-control"  v-model='list.name' v-show="list.isedit" v-on:keyup.enter="saveedit(list)"
+                                     />
+
+                                </li>
+                            </ul>
+                        </template>
+                    </ul>
+                </div>
+                <!--清单显示-->
+                <div class="com-md-1"></div>
+
+                <div class="col-md-6  table-responsive centercontent">
+                    <!--新增待办事项-->
+                    <!--中间第二部分显示部分-->
+
+
+  <!--输入待办事项-->
+                    <table class="table table-condensed">
+                      
+                        <tr>
+                            <td>
+                                <label>
+                                    <input type="text" class="form-control" v-model="newitem.content" placeholder="请输入待办事项" v-on:keyup.enter="additem">
+                                </label>
+                            </td>
+
+                            <td>
+                                <label>
+                                    <label>
+                                        <select v-model="newitem.priority" aria-placeholder="优先级" class="form-control">
+                                            <option value=1>重要(1)</option>
+                                            <option value=2>普通(2)</option>
+                                            <option value=3>任意(3)</option>
+                                        </select>
+                                    </label>
+                                </label>
+                            </td>
+
+
+                            <td>
+                                <label>
+                                     <vue-datepicker-local  v-model="newitem.data"></vue-datepicker-local>
+                                </label>
+                            </td>
+
+
+                            <td>
+                                <button v-on:click="additem" type="button" class="form-control btn btn-primary">保存</button>
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+
+
+
+
+
+
+
+<!--搜索功能/模糊匹配-->
+                    <div class="list-group" v-show="showsearch">
+
+                        <input class="form-control" type="text" v-model="searchData" placeholder="请输入搜索内容  ">
+                        <ul>
+                            <template>
+                                <li v-for="(item,index) in Newitems" :key="index">
+
+                                    <span class="serachstyle">{{item.content}}</span>
+
+                                </li>
+                            </template>
+                        </ul>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!--第二部分/显示事项列表-->
+                   
+                    <div class="list-group" v-show="showitems">
+
+                        <form class="form-inline" role="form">
+
+                            <ul class="list-group">
+
+                                <template>
+                                    <!--显示当前使用清单名字-->
+                                    <div class="listname" v-for="(list,index) in lists" v-if="list.id==cur_list">
+                                        <h2>{{list.name}}</h2>
+                                    </div>
+                   <!--展示当前清单未完成的待办事项--><li class="list-group-item" v-for="item, index in items" v-if="item.parent_id==cur_list&&item.isCompleted==false">
+
+
+                                        <a href="#" v-on:click="change_state(item)" v-show="!item.edit">
+                                            <!--!item.edit表明不再编辑状态，正常显示-->
+                                            <span class="col-md-5" v-bind:class="{ itemfinish:item.isCompleted }"> {{item.content}} </span>
+                                        </a>
+                                        <input class="col-md-5" type="text" v-show="item.edit" v-model="item.content" v-on:keyup.enter="edititem(item)" >
+                                        <span class="col-md-5">{{item.data}}</span>
+                                        <span class="col-md-1">{{item.priority}}</span>
+                                        <i class="delete_icon glyphicon glyphicon-remove-circle" v-on:click="delete_item(item)"> </i>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-on:click="itemCompleted(item)">
+                                            </label>
+                                        </div>
+                                    </li>
+                                </template>
+                            </ul>
+                        </form>
+                    </div>
+
+                </div>
+
+
+
+
+                <!--展示已完成的任务事项(isCompleted)-->
+
+
+
+                <div class="col-md-3 " v-show="completed">
+
+                    <!--展示已完成的任务事项-->
+
+                    <div class="list-group">
+
+                        <ul class="finished" >
+                            <template>
+                                <h1>已完成的事项</h1>
+                                <li class="list-group-item completeditem" v-for="item, index in items" v-if="item.isCompleted==true">
+
+                                    <a href="#" class="showfinished" v-on:click="itemCompleted(item)">
+                                        {{item.content}} {{item.data}}
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+   
+
+
+
+
+<div class="col-md-3 " v-show="todoitems">
+
+        <!--展示未完成的任务事项，一键隐藏已完成任务-->
+
+        <div class="list-group">
+
+            <ul class="" >
+                <template>
+                    <h1>未完成的事项</h1>
+                    <li class="list-group-item completeditem" v-for="item, index in  uncompleted" >
+
+                        <a href="#" v-on:click="itemCompleted(item)">
+                            {{item.content}} {{item.data}}
+                        </a>
+                    </li>
+                </template>
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+                <!--搜索功能/模糊匹配-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script src="js/jquery/2.0.0/jquery.min.js"></script>
+<script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>
+<script src="vue.js"></script>
+<script src="./vue-datepicker-local-master/vue-datepicker-local-master/dist/vue-datepicker-local.js"></script>
+<script src="./test.js"></script>
+<script src="./load.js"></script>
+
+</html>
